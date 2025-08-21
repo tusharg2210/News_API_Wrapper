@@ -1,7 +1,9 @@
 import fetch from "node-fetch";
-
+import { cors } from "../middleware/cors";
 export default async function handler(req, res) {
   const country = req.query.country || "us";
+
+  if (cors(req, res)) return;
 
   try {
     const response = await fetch(

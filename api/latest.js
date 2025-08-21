@@ -1,18 +1,25 @@
 import fetch from "node-fetch";
-import { cors } from "../middleware/cors";
-
 export default async function handler(req, res) {
-  const query = req.query.q || "breaking-news";
+  // ✅ Add CORS headers
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Origin", "*"); // or "http://localhost:3000"
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  if (cors(req, res)) return;
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
   try {
+    // Example: fetch news from external API
     const response = await fetch(
-      `https://newsapi.org/v2/everything?q=${query}&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`
+      `https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.NEWS_API_KEY}`
     );
     const data = await response.json();
+
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch latest news" });
+    console.error("API Error:", error);
+    res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 }

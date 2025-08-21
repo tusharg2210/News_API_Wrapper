@@ -1,9 +1,16 @@
 import fetch from "node-fetch";
-import { cors } from "../middleware/cors";
 export default async function handler(req, res) {
-  const country = req.query.country || "us";
+  // ✅ Add CORS headers
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Origin", "*"); // or "http://localhost:3000"
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  if (cors(req, res)) return;
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  const country = req.query.country || "us";
 
   try {
     const response = await fetch(

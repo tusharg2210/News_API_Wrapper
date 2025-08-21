@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   try {
     // Example: fetch news from external API
     const response = await fetch(
-      `https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.NEWS_API_KEY}`
+      `https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.NEWS_API_KEY || process.env.NEWS_API_KEY_1}`
     );
     const data = await response.json();
 

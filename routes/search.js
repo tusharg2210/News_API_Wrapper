@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://newsapi.org/v2/everything?q=${query}&apiKey=${process.env.NEWS_API_KEY}`
+      `https://newsapi.org/v2/everything?q=${query}&apiKey=${process.env.NEWS_API_KEY || process.env.NEWS_API_KEY_1}`
     );
     const data = await response.json();
     res.json(data);
